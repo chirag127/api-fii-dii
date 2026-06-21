@@ -1,0 +1,15 @@
+name = "oriz-flow-fii-dii-activity-api"
+main = "src/index.ts"
+compatibility_date = "2026-06-21"
+compatibility_flags = ["nodejs_compat"]
+
+routes = [
+  { pattern = "flow-fii-dii.api.oriz.in", custom_domain = true }
+]
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "REPLACE_WITH_KV_ID_AFTER_FIRST_DEPLOY"
+
+[observability]
+enabled = true
