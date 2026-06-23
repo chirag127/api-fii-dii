@@ -1,0 +1,122 @@
+name: deploy
+
+# Build Starlight docs site (using oriz-api-docs-template's starlight-template/)
+# from this API repo's README.md + data/latest.json, then deploy to GitHub Pages.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "README.md"
+      - "data/**"
+      - "CNAME"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout API repo
+        uses: actions/checkout@v4
+        with:
+          path: api
+
+      - name: Checkout docs template
+        uses: actions/checkout@v4
+        with:
+          repository: oriz-co/oriz-api-docs-template
+          ref: main
+          path: template
+
+      - name: Stage docs site
+        run: |
+          set -e
+          cp -r template/starlight-template _docs
+          mkdir -p _docs/public/data _docs/src/content/docs
+
+          # Carry the API's data/ into the published site (so /data/latest.json works).
+          if [ -d api/data ]; then
+            cp -r api/data/* _docs/public/data/ || true
+          fi
+
+          # Carry CNAME so the custom domain survives the deploy.
+          if [ -f api/CNAME ]; then
+            cp api/CNAME _docs/public/CNAME
+          fi
+
+          # Derive the site title from the API repo name.
+          REPO_NAME="${GITHUB_REPOSITORY##*/}"
+          SITE_TITLE=$(echo "$REPO_NAME" \
+            | sed -e 's/^oriz-//' -e 's/-api$//' -e 's/-/ /g' \
+            | awk '{ for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2) }1')
+          echo "Site title: $SITE_TITLE"
+
+          # README.md -> src/content/docs/index.mdx with Starlight frontmatter.
+          {
+            echo "---"
+            echo "title: $SITE_TITLE"
+            echo "description: $SITE_TITLE - daily-refreshed open data API by oriz.in"
+            echo "template: doc"
+            echo "---"
+            echo ""
+            # Strip the first H1 from the README (Starlight renders the title for us).
+            awk 'BEGIN{skipped=0} /^# / && !skipped { skipped=1; next } { print }' api/README.md
+          } > _docs/src/content/docs/index.mdx
+
+          # Generate api.mdx from data/latest.json (shape + sample).
+          node template/scripts/gen-api-mdx.mjs \
+            "api/data/latest.json" \
+            "_docs/src/content/docs/api.mdx" \
+            "$SITE_TITLE" \
+            "$REPO_NAME" || echo "api.mdx skipped (no data/latest.json)"
+
+          # Write the site title into a JSON so astro.config.mjs picks it up.
+          cat > _docs/oriz.config.json <<EOF
+          { "title": "$SITE_TITLE",
+            "repo":  "$GITHUB_REPOSITORY",
+            "homepage": "$(if [ -f api/CNAME ]; then echo "https://$(cat api/CNAME)"; else echo "https://${GITHUB_REPOSITORY_OWNER}.github.io/${REPO_NAME}"; fi)" }
+          EOF
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: _docs/pnpm-lock.yaml
+
+      - name: Install
+        working-directory: _docs
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build
+        working-directory: _docs
+        env:
+          # Starlight needs `site:` for absolute URLs; let it infer otherwise.
+          SITE_URL: ${{ steps.cname.outputs.url }}
+        run: pnpm run build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _docs/dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
