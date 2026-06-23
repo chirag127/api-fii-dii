@@ -50,7 +50,7 @@ jobs:
       - name: Build site from README + data/
         run: node template/bootstrap.mjs --src="${{ github.workspace }}/host" --dest="${{ github.workspace }}/dist"
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
       - uses: actions/upload-pages-artifact@v3
         with:
