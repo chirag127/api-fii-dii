@@ -1,0 +1,17 @@
+name: megalinter
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  security-events: write
+
+jobs:
+  lint:
+    uses: chirag127/workflows/.github/workflows/megalinter.yml@main
