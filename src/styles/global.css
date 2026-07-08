@@ -1,0 +1,20 @@
+/* MD3 dark tokens */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap');
+:root {
+  --md-surface:#0F0D13; --md-surface-container-low:#1D1B20;
+  --md-surface-container:#211F26; --md-surface-container-high:#2B2930;
+  --md-primary:#D0BCFF; --md-on-primary:#381E72;
+  --md-primary-container:#4F378B; --md-on-primary-container:#EADDFF;
+  --md-secondary-container:#4A4458; --md-on-secondary-container:#E8DEF8;
+  --md-outline:#938F99; --md-outline-variant:#49454F;
+  --md-on-surface:#E6E1E5; --md-on-surface-variant:#CAC4D0;
+  --md-shape-sm:8px; --md-shape-md:12px; --md-shape-lg:16px;
+  --md-font-display:"Google Sans Display","Google Sans",Roboto,sans-serif;
+  --md-font-body:"Google Sans Text","Google Sans",Roboto,sans-serif;
+  --md-font-mono:"Roboto Mono",monospace;
+  color-scheme:dark;
+}
+body{background:var(--md-surface);color:var(--md-on-surface-variant);font-family:var(--md-font-body)}
+a{color:var(--md-primary)}
+h1,h2,h3{font-family:var(--md-font-display);color:var(--md-on-surface)}
+pre,code{font-family:var(--md-font-mono);background:var(--md-surface-container-high);padding:4px 8px;border-radius:8px}
