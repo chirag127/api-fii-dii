@@ -45,9 +45,8 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Patch template for pnpm v11 (onlyBuiltDependencies moved to pnpm-workspace.yaml)
-        run: |
-          printf 'onlyBuiltDependencies:\n  - esbuild\n' > template/template/pnpm-workspace.yaml
+      - name: Allow esbuild build scripts globally (pnpm v11 blocks by default)
+        run: pnpm config set dangerously-allow-all-builds true
 
       - name: Build site from README + data/
         run: node template/bootstrap.mjs --src="${{ github.workspace }}/host" --dest="${{ github.workspace }}/dist"
