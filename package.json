@@ -1,5 +1,5 @@
 {
-  "name": "oriz-flow-fii-dii-activity-api",
+  "name": "flow-fii-dii-activity",
   "version": "0.2.0",
   "description": "Daily FII/DII net activity for Indian markets — scraped by GitHub Actions, served via GitHub Pages + raw.githubusercontent.com.",
   "private": true,
