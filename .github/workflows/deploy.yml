@@ -45,15 +45,9 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Patch template to allow esbuild build scripts (pnpm v11 requires explicit approval)
+      - name: Patch template for pnpm v11 (onlyBuiltDependencies moved to pnpm-workspace.yaml)
         run: |
-          node -e "
-            const fs = require('fs');
-            const p = 'template/template/package.json';
-            const pkg = JSON.parse(fs.readFileSync(p, 'utf8'));
-            pkg.pnpm = { ...(pkg.pnpm || {}), onlyBuiltDependencies: ['esbuild'] };
-            fs.writeFileSync(p, JSON.stringify(pkg, null, 2));
-          "
+          printf 'onlyBuiltDependencies:\n  - esbuild\n' > template/template/pnpm-workspace.yaml
 
       - name: Build site from README + data/
         run: node template/bootstrap.mjs --src="${{ github.workspace }}/host" --dest="${{ github.workspace }}/dist"
