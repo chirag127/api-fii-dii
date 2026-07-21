@@ -2,12 +2,12 @@
   "date": "2026-06-23",
   "source": "moneycontrol",
   "equity": {
-    "fii_buy": 0,
-    "fii_sell": 0,
-    "fii_net": 0,
-    "dii_buy": 0,
-    "dii_sell": 0,
-    "dii_net": 0
+    "fii_buy": 15396.07,
+    "fii_sell": 15378.21,
+    "fii_net": 17.86,
+    "dii_buy": 16863.04,
+    "dii_sell": 16182.83,
+    "dii_net": 680.21
   },
   "derivative": {
     "fii_buy": 0,
