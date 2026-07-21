@@ -24,6 +24,7 @@ jobs:
             ${{ runner.os }}-npm-
       - run: npm install --no-audit --no-fund
       - run: node scripts/scrape.mjs
+      - run: node scripts/manifest.mjs
       - run: node scripts/chart.mjs
       - name: Commit + push
         run: |

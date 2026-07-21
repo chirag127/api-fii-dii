@@ -27,5 +27,12 @@ jobs:
             echo "::error::README chart is stale — run 'node scripts/chart.mjs' and commit.";
             exit 1;
           }
+      - name: Data manifest is current (no uncommitted drift)
+        run: |
+          node scripts/manifest.mjs
+          git diff --exit-code data/index.json || {
+            echo "::error::data/index.json is stale — run 'node scripts/manifest.mjs' and commit.";
+            exit 1;
+          }
       - name: Static site builds
         run: node scripts/build-site.mjs

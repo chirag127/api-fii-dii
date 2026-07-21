@@ -1,9 +1,9 @@
-// Regenerate docs/screenshot.png from the live GitHub Pages site.
-// Requires Playwright (already a transitive dev tool). Run:
-//   node scripts/screenshot.mjs            # shoots the live site
-//   SITE=http://localhost:8000 node scripts/screenshot.mjs   # shoot a local build
-// To screenshot a local build first: `node scripts/build-site.mjs && npx serve dist`.
-import { chromium } from 'playwright';
+// Regenerate docs/screenshot.png from the live GitHub Pages site (or a local
+// build). Uses the Playwright CLI via npx so no package install is required.
+//   node scripts/screenshot.mjs                              # live site
+//   SITE=http://localhost:5055 node scripts/screenshot.mjs   # local build
+// For a local build first: `node scripts/build-site.mjs && npx serve -l 5055 dist`.
+import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { mkdirSync } from 'node:fs';
@@ -14,10 +14,11 @@ const url = process.env.SITE || 'https://chirag127.github.io/fii-dii-activity-ap
 
 mkdirSync(join(root, 'docs'), { recursive: true });
 
-const browser = await chromium.launch();
-const page = await browser.newPage({ viewport: { width: 1000, height: 900 } });
-await page.goto(url, { waitUntil: 'networkidle' });
-await page.waitForTimeout(1500); // let the inline SVG settle
-await page.screenshot({ path: out, fullPage: true });
-await browser.close();
+// The chart renders client-side, so wait for network idle before capturing.
+const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+execFileSync(
+  npx,
+  ['--yes', 'playwright', 'screenshot', '--full-page', '--viewport-size=1000,900', '--wait-for-timeout=3000', url, out],
+  { stdio: 'inherit' }
+);
 console.log(`Wrote ${out} from ${url}`);

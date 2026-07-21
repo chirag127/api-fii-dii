@@ -10,15 +10,17 @@ import { dirname, join } from 'node:path';
 import { validatePayload, hasData } from './lib/schema.mjs';
 
 const dataDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'data');
-const files = readdirSync(dataDir).filter((f) => f.endsWith('.json'));
-const dated = files.filter((f) => /^\d{4}-\d{2}-\d{2}\.json$/.test(f));
+const allJson = readdirSync(dataDir).filter((f) => f.endsWith('.json'));
+const dated = allJson.filter((f) => /^\d{4}-\d{2}-\d{2}\.json$/.test(f));
+// index.json is a discovery manifest, not a payload — validate it separately.
+const payloadFiles = allJson.filter((f) => f !== 'index.json');
 
 test('data/ directory contains files', () => {
-  assert.ok(files.length > 0, 'no data files found');
-  assert.ok(files.includes('latest.json'), 'latest.json missing');
+  assert.ok(payloadFiles.length > 0, 'no data files found');
+  assert.ok(payloadFiles.includes('latest.json'), 'latest.json missing');
 });
 
-for (const f of files) {
+for (const f of payloadFiles) {
   test(`${f} is valid JSON and a schema-conforming payload`, () => {
     const raw = readFileSync(join(dataDir, f), 'utf8');
     let payload;
