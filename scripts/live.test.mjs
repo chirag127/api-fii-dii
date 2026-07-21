@@ -16,8 +16,8 @@ const LIVE = process.env.LIVE === '1';
 const skip = LIVE ? false : 'set LIVE=1 to run live-endpoint tests';
 
 const RAW = 'https://raw.githubusercontent.com/chirag127/fii-dii-activity-api/main/data';
-const PAGES = 'https://chirag127.github.io/fii-dii-activity-api';
-const CNAME = 'https://fii-dii-flow.api.oriz.in';
+const PAGES = 'https://chirag127.github.io/fii-dii-activity-api/data';
+const CNAME = 'https://fii-dii.api.oriz.in/data';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 
 async function fetchJson(url, headers = {}) {

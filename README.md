@@ -25,8 +25,9 @@ xychart-beta
 
 | URL | Description |
 | --- | --- |
-| `https://chirag127.github.io/fii-dii-activity-api/latest.json` | Most recent scrape |
-| `https://chirag127.github.io/fii-dii-activity-api/<YYYY-MM-DD>.json` | A specific day |
+| `https://fii-dii.api.oriz.in/data/latest.json` | Most recent scrape (custom domain) |
+| `https://fii-dii.api.oriz.in/data/<YYYY-MM-DD>.json` | A specific day |
+| `https://chirag127.github.io/fii-dii-activity-api/data/latest.json` | Most recent scrape (GitHub Pages) |
 | `https://raw.githubusercontent.com/chirag127/fii-dii-activity-api/main/data/latest.json` | Same data via raw (no Pages dependency) |
 
 ## Response shape (`latest.json`)
