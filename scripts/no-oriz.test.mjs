@@ -27,11 +27,15 @@ test('no file contains the legacy brand string', () => {
   // Build the needle from fragments so THIS file doesn't contain the literal.
   const needle = 'or' + 'iz';
   const re = new RegExp(needle, 'i');
+  // The guard script's own filename legitimately contains the fragment; strip
+  // references to it (e.g. in README docs) before scanning.
+  const filenameToken = new RegExp('no-' + needle + '\\.test\\.mjs', 'gi');
   const offenders = [];
   for (const file of walk(root)) {
     const rel = relative(root, file).replace(/\\/g, '/');
     if (SELF.has(rel)) continue;
-    if (re.test(readFileSync(file, 'utf8'))) offenders.push(rel);
+    const text = readFileSync(file, 'utf8').replace(filenameToken, '');
+    if (re.test(text)) offenders.push(rel);
   }
   assert.deepEqual(offenders, [], `legacy brand found in: ${offenders.join(', ')}`);
 });

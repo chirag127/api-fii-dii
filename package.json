@@ -8,10 +8,15 @@
   "scripts": {
     "scrape": "node scripts/scrape.mjs",
     "chart": "node scripts/chart.mjs",
+    "build": "node scripts/build-site.mjs",
+    "screenshot": "node scripts/screenshot.mjs",
     "test": "node --test \"scripts/**/*.test.mjs\"",
     "test:live": "node --test scripts/live.test.mjs"
   },
   "dependencies": {
     "cheerio": "^1.0.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1"
   }
 }
