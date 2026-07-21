@@ -27,8 +27,6 @@ servers:
     description: jsDelivr CDN (mirror, cached/fast)
   - url: https://cdn.statically.io/gh/chirag127/fii-dii-activity-api/main/data
     description: Statically CDN (mirror)
-  - url: https://fii-dii.api.oriz.in/data
-    description: Custom domain (mirror, may change)
 
 paths:
   /latest.json:

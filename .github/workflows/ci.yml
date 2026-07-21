@@ -27,3 +27,5 @@ jobs:
             echo "::error::README chart is stale — run 'node scripts/chart.mjs' and commit.";
             exit 1;
           }
+      - name: Static site builds
+        run: node scripts/build-site.mjs

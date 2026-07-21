@@ -1,7 +1,7 @@
 name: deploy
 
-# Path D â€” bespoke Stripe/Linear-style hero + live data preview + README content.
-# Uses oriz-co/oriz-api-docs-template as the build template.
+# Plain static GitHub Pages deploy — no external template.
+# Builds dist/ from data/ + openapi.yaml + a generated index.html.
 
 on:
   push:
@@ -9,7 +9,8 @@ on:
     paths:
       - "README.md"
       - "data/**"
-      - "CNAME"
+      - "openapi.yaml"
+      - "scripts/build-site.mjs"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
@@ -26,36 +27,15 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout host API repo
-        uses: actions/checkout@v4
-        with:
-          path: host
-
-      - name: Checkout docs template
-        uses: actions/checkout@v4
-        with:
-          repository: oriz-co/oriz-api-docs-template
-          path: template
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 11.8.0
-
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-
-      - name: Allow esbuild build scripts globally (pnpm v11 blocks by default)
-        run: pnpm config set dangerously-allow-all-builds true
-
-      - name: Build site from README + data/
-        run: node template/bootstrap.mjs --src="${{ github.workspace }}/host" --dest="${{ github.workspace }}/dist"
-
+      - name: Build static site
+        run: node scripts/build-site.mjs
       - uses: actions/configure-pages@v5
-
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-
       - id: deployment
         uses: actions/deploy-pages@v4

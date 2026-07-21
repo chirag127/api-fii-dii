@@ -19,7 +19,6 @@ const CANONICAL = 'https://chirag127.github.io/fii-dii-activity-api/data';
 const RAW = 'https://raw.githubusercontent.com/chirag127/fii-dii-activity-api/main/data';
 const JSDELIVR = 'https://cdn.jsdelivr.net/gh/chirag127/fii-dii-activity-api@main/data';
 const STATICALLY = 'https://cdn.statically.io/gh/chirag127/fii-dii-activity-api/main/data';
-const CNAME = 'https://fii-dii.api.oriz.in/data';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 
 async function fetchJson(url, headers = {}) {
@@ -34,7 +33,6 @@ for (const [label, base] of [
   ['raw.githubusercontent', RAW],
   ['jsdelivr', JSDELIVR],
   ['statically', STATICALLY],
-  ['cname', CNAME],
 ]) {
   test(`${label}: latest.json is reachable and schema-valid`, { skip }, async () => {
     const { res, body } = await fetchJson(`${base}/latest.json`);

@@ -17,8 +17,8 @@ test('spec declares OpenAPI 3.1 and the API title', () => {
   assert.match(spec, /title:\s*FII\/DII Activity API/);
 });
 
-test('spec has NO "Oriz Flow" branding', () => {
-  assert.doesNotMatch(spec, /Oriz Flow/i);
+test('spec has no legacy "oriz" branding or domain', () => {
+  assert.doesNotMatch(spec, /oriz/i);
 });
 
 test('spec documents both endpoints', () => {
@@ -37,7 +37,6 @@ test('spec lists the mirror servers', () => {
     'raw.githubusercontent.com/chirag127/fii-dii-activity-api',
     'cdn.jsdelivr.net/gh/chirag127/fii-dii-activity-api',
     'cdn.statically.io/gh/chirag127/fii-dii-activity-api',
-    'fii-dii.api.oriz.in',
   ]) {
     assert.ok(spec.includes(host), `server ${host} missing from spec`);
   }
