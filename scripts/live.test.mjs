@@ -15,8 +15,10 @@ import { validatePayload } from './lib/schema.mjs';
 const LIVE = process.env.LIVE === '1';
 const skip = LIVE ? false : 'set LIVE=1 to run live-endpoint tests';
 
+const CANONICAL = 'https://chirag127.github.io/fii-dii-activity-api/data';
 const RAW = 'https://raw.githubusercontent.com/chirag127/fii-dii-activity-api/main/data';
-const PAGES = 'https://chirag127.github.io/fii-dii-activity-api/data';
+const JSDELIVR = 'https://cdn.jsdelivr.net/gh/chirag127/fii-dii-activity-api@main/data';
+const STATICALLY = 'https://cdn.statically.io/gh/chirag127/fii-dii-activity-api/main/data';
 const CNAME = 'https://fii-dii.api.oriz.in/data';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 
@@ -27,7 +29,13 @@ async function fetchJson(url, headers = {}) {
 
 // --- Product endpoints (must serve valid, schema-conforming JSON) -----------
 
-for (const [label, base] of [['raw.githubusercontent', RAW], ['github-pages', PAGES], ['cname', CNAME]]) {
+for (const [label, base] of [
+  ['github-pages (canonical)', CANONICAL],
+  ['raw.githubusercontent', RAW],
+  ['jsdelivr', JSDELIVR],
+  ['statically', STATICALLY],
+  ['cname', CNAME],
+]) {
   test(`${label}: latest.json is reachable and schema-valid`, { skip }, async () => {
     const { res, body } = await fetchJson(`${base}/latest.json`);
     assert.equal(res.status, 200, `${base}/latest.json returned ${res.status}`);
@@ -38,7 +46,7 @@ for (const [label, base] of [['raw.githubusercontent', RAW], ['github-pages', PA
 
 test('raw: a specific dated file is reachable and valid', { skip }, async () => {
   // First discover the latest date, then fetch that dated file by name.
-  const { body: latest } = await fetchJson(`${RAW}/latest.json`);
+  const { body: latest } = await fetchJson(`${CANONICAL}/latest.json`);
   const { res, body } = await fetchJson(`${RAW}/${latest.date}.json`);
   assert.equal(res.status, 200);
   assert.equal(validatePayload(body).ok, true);

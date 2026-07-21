@@ -8,7 +8,8 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const readme = readFileSync(join(root, 'README.md'), 'utf8');
+// Normalize CRLF -> LF so assertions are line-ending agnostic (Windows checkouts).
+const readme = readFileSync(join(root, 'README.md'), 'utf8').replace(/\r\n/g, '\n');
 
 test('README contains the chart markers and a mermaid block', () => {
   assert.match(readme, /<!-- CHART:BEGIN -->/);

@@ -1,8 +1,6 @@
-# Oriz Flow — FII/DII Activity API
+# FII/DII Activity API
 
-![Oriz Flow](logo.svg)
-
-Daily **FII** (Foreign Institutional Investors) and **DII** (Domestic Institutional Investors) net buy/sell activity for Indian equity markets — scraped by GitHub Actions, served as static JSON via GitHub Pages and `raw.githubusercontent.com`. Zero Cloudflare Workers, zero ongoing cost.
+Daily **FII** (Foreign Institutional Investors) and **DII** (Domestic Institutional Investors) net buy/sell activity for Indian equity markets — scraped by GitHub Actions, served as static JSON via GitHub Pages and `raw.githubusercontent.com`. Zero servers, zero ongoing cost.
 
 ## Chart
 
@@ -23,12 +21,19 @@ xychart-beta
 
 ## Endpoints (static JSON)
 
+The **canonical** base URL is GitHub Pages — it never expires and has no external DNS dependency. The custom domain and raw URLs are equivalent mirrors of the same data.
+
 | URL | Description |
 | --- | --- |
-| `https://fii-dii.api.oriz.in/data/latest.json` | Most recent scrape (custom domain) |
-| `https://fii-dii.api.oriz.in/data/<YYYY-MM-DD>.json` | A specific day |
-| `https://chirag127.github.io/fii-dii-activity-api/data/latest.json` | Most recent scrape (GitHub Pages) |
-| `https://raw.githubusercontent.com/chirag127/fii-dii-activity-api/main/data/latest.json` | Same data via raw (no Pages dependency) |
+| `https://chirag127.github.io/fii-dii-activity-api/data/latest.json` | **Canonical** — most recent scrape |
+| `https://chirag127.github.io/fii-dii-activity-api/data/<YYYY-MM-DD>.json` | Canonical — a specific day |
+| `https://raw.githubusercontent.com/chirag127/fii-dii-activity-api/main/data/latest.json` | Mirror via raw (no Pages dependency) |
+| `https://raw.githubusercontent.com/chirag127/fii-dii-activity-api/main/data/<YYYY-MM-DD>.json` | Mirror via raw — a specific day |
+| `https://cdn.jsdelivr.net/gh/chirag127/fii-dii-activity-api@main/data/latest.json` | Mirror via jsDelivr CDN (cached, fast) |
+| `https://cdn.statically.io/gh/chirag127/fii-dii-activity-api/main/data/latest.json` | Mirror via Statically CDN |
+| `https://fii-dii.api.oriz.in/data/latest.json` | Mirror via custom domain (may change) |
+
+Machine-readable contract: [`openapi.yaml`](./openapi.yaml) (import into RapidAPI, Postman, Swagger UI, etc.).
 
 ## Response shape (`latest.json`)
 
