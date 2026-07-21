@@ -10,3 +10,4 @@ dist/
 .env.local
 .env.*.local
 .sops-age-key.txt
+.ignore

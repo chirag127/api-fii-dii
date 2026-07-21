@@ -1,2 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Data + source files always use LF, even on Windows checkouts, so the
+# scraper (which writes LF) never produces spurious CRLF diffs.
+*.json text eol=lf
+*.mjs  text eol=lf
+*.md   text eol=lf

@@ -9,3 +9,21 @@ on:
 jobs:
   ci:
     uses: chirag127/workflows/.github/workflows/ci-data-scrape-api.yml@main
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - name: Unit + data-file tests (offline, deterministic)
+        run: npm test
+      - name: Chart generator is deterministic (no uncommitted drift)
+        run: |
+          node scripts/chart.mjs
+          git diff --exit-code README.md || {
+            echo "::error::README chart is stale — run 'node scripts/chart.mjs' and commit.";
+            exit 1;
+          }

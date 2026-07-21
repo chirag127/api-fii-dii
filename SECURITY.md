@@ -12,7 +12,7 @@ This repo scrapes publicly available NSE/MoneyControl data and serves static JSO
 
 ## Reporting a Vulnerability
 
-Use [GitHub Security Advisories](https://github.com/chirag127/flow-fii-dii-activity/security/advisories/new) to report privately. Include:
+Use [GitHub Security Advisories](https://github.com/chirag127/fii-dii-activity-api/security/advisories/new) to report privately. Include:
 
 - Description of the issue
 - Steps to reproduce
